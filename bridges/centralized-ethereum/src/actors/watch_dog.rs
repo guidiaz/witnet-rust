@@ -147,7 +147,6 @@ impl WatchDog {
             let mut metrics: String = "{".to_string();
             metrics.push_str(&format!("\"drsFinished\": {drs_finished}, "));
             metrics.push_str(&format!("\"drsPending\": {drs_pending}, "));
-            metrics.push_str(&format!("\"evmAccount\": \"{eth_account}\", "));
 
             if let Some(wit_client) = wit_client {
                 if let Err(err) = check_wit_connection_status(&wit_client).await {
@@ -205,6 +204,7 @@ impl WatchDog {
 
             if eth_balance.is_some() {
                 let eth_balance = eth_balance.unwrap();
+                metrics.push_str(&format!("\"evmAccount\": \"{eth_account}\", "));
                 metrics.push_str(&format!("\"evmBalance\": {:.5}, ", eth_balance));
                 metrics.push_str(&format!("\"evmContract\": \"{eth_contract_address}\", "));
                 if let Some(start_eth_balance) = start_eth_balance {
