@@ -2692,7 +2692,7 @@ pub struct DataRequestQueryParams {
     dro_hash: Hash,
     rad_hash: Hash,
     rad_bytecode: String,
-    collateral_ratio: f32,
+    collateral_ratio: u16,
     unitary_reward: u64,
     witnesses: u16,
 }
@@ -2837,9 +2837,7 @@ async fn get_drt_query_params(dr_tx_hash: Hash) -> Result<DataRequestQueryParams
                     .to_pb_bytes()
                     .unwrap_or_default();
                 Ok(DataRequestQueryParams {
-                    collateral_ratio: (dr_tx.body.dr_output.collateral as f64)
-                        .div(dr_tx.body.dr_output.witness_reward as f64)
-                        as f32,
+                    collateral_ratio: dr_tx.body.dr_output.collateral.div_ceil(dr_tx.body.dr_output.witness_reward) as u16,
                     dro_hash: dr_tx.body.dr_output.hash(),
                     rad_hash: calculate_sha256(&bytecode).into(),
                     rad_bytecode: hex::encode(&bytecode),
@@ -2865,9 +2863,7 @@ async fn get_drt_query_params(dr_tx_hash: Hash) -> Result<DataRequestQueryParams
                             .to_pb_bytes()
                             .unwrap_or_default();
                         Ok(DataRequestQueryParams {
-                            collateral_ratio: (dr_tx.body.dr_output.collateral as f64)
-                                .div(dr_tx.body.dr_output.witness_reward as f64)
-                                as f32,
+                            collateral_ratio: dr_tx.body.dr_output.collateral.div_ceil(dr_tx.body.dr_output.witness_reward) as u16,
                             dro_hash: dr_tx.body.dr_output.hash(),
                             rad_hash: calculate_sha256(&bytecode).into(),
                             rad_bytecode: hex::encode(&bytecode),
